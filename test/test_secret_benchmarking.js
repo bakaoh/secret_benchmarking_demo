@@ -1,7 +1,4 @@
 const fs = require('fs');
-const path = require('path');
-const dotenv = require('dotenv');
-const SampleContract = artifacts.require("Sample");
 const {Enigma, utils, eeConstants} = require('enigma-js/node');
 
 var EnigmaContract;
@@ -23,7 +20,7 @@ function sleep(ms) {
 let enigma = null;
 let contractAddr;
 
-contract("Sample", accounts => {
+contract("SecretBenchmarking", accounts => {
   before(function() {
     enigma = new Enigma(
       web3,
@@ -42,10 +39,10 @@ contract("Sample", accounts => {
   })
 
   let task;
-  it('should execute compute task', async () => {
+  it('should execute submit_dataset task', async () => {
     let taskFn = 'submit_dataset(string,uint256[])';
     let taskArgs = [
-      ['abc', 'string'],
+      ['Generic Security Audit', 'string'],
       [[1,5,7,2,4], 'uint256[]'],
     ];
     let taskGasLimit = 1000000;
@@ -57,12 +54,12 @@ contract("Sample", accounts => {
     });
   });
 
-  it('should get the pending task', async () => {
+  it('should get the pending submit_dataset task', async () => {
     task = await enigma.getTaskRecordStatus(task);
     expect(task.ethStatus).to.equal(1);
   });
 
-  it('should get the confirmed task', async () => {
+  it('should get the confirmed submit_dataset task', async () => {
     do {
       await sleep(1000);
       task = await enigma.getTaskRecordStatus(task);
@@ -72,7 +69,7 @@ contract("Sample", accounts => {
     process.stdout.write('Completed. Final Task Status is '+task.ethStatus+'\n');
   }, 10000);
 
-  it('should get the result and verify the computation is correct', async () => {
+  it('should get the result and verify submit_dataset is correct', async () => {
     task = await new Promise((resolve, reject) => {
       enigma.getTaskResult(task)
         .on(eeConstants.GET_TASK_RESULT_RESULT, (result) => resolve(result))
@@ -81,7 +78,7 @@ contract("Sample", accounts => {
     expect(task.engStatus).to.equal('SUCCESS');
   });
 
-  it('should execute compute task', async () => {
+  it('should execute get_name_list task', async () => {
     let taskFn = 'get_name_list()';
     let taskArgs = [];
     let taskGasLimit = 1000000;
@@ -93,12 +90,12 @@ contract("Sample", accounts => {
     });
   });
 
-  it('should get the pending task', async () => {
+  it('should get the pending get_name_list task', async () => {
     task = await enigma.getTaskRecordStatus(task);
     expect(task.ethStatus).to.equal(1);
   });
 
-  it('should get the confirmed task', async () => {
+  it('should get the confirmed get_name_list task', async () => {
     do {
       await sleep(1000);
       task = await enigma.getTaskRecordStatus(task);
@@ -108,7 +105,7 @@ contract("Sample", accounts => {
     process.stdout.write('Completed. Final Task Status is '+task.ethStatus+'\n');
   }, 10000);
 
-  it('should get the result and verify the computation is correct', async () => {
+  it('should get the result and verify get_name_list is correct', async () => {
     task = await new Promise((resolve, reject) => {
       enigma.getTaskResult(task)
         .on(eeConstants.GET_TASK_RESULT_RESULT, (result) => resolve(result))
@@ -121,13 +118,13 @@ contract("Sample", accounts => {
       name: 'list',
     }], task.decryptedOutput).list;
 
-    expect(list).to.equal("start,abc");
+    expect(list).to.equal("Generic Security Audit,");
   });
 
-  it('should execute compute task', async () => {
+  it('should execute submit_quote task', async () => {
     let taskFn = 'submit_quote(string,uint256)';
     let taskArgs = [
-      ['abc', 'string'],
+      ['Generic Security Audit', 'string'],
       [5, 'uint256'],
     ];
     let taskGasLimit = 1000000;
@@ -139,12 +136,12 @@ contract("Sample", accounts => {
     });
   });
 
-  it('should get the pending task', async () => {
+  it('should get the pending submit_quote task', async () => {
     task = await enigma.getTaskRecordStatus(task);
     expect(task.ethStatus).to.equal(1);
   });
 
-  it('should get the confirmed task', async () => {
+  it('should get the confirmed submit_quote task', async () => {
     do {
       await sleep(1000);
       task = await enigma.getTaskRecordStatus(task);
@@ -154,7 +151,7 @@ contract("Sample", accounts => {
     process.stdout.write('Completed. Final Task Status is '+task.ethStatus+'\n');
   }, 10000);
 
-  it('should get the result and verify the computation is correct', async () => {
+  it('should get the result and verify submit_quote is correct', async () => {
     task = await new Promise((resolve, reject) => {
       enigma.getTaskResult(task)
         .on(eeConstants.GET_TASK_RESULT_RESULT, (result) => resolve(result))

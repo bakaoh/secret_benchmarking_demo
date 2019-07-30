@@ -4,23 +4,14 @@
 // Imports
 extern crate eng_wasm;
 extern crate eng_wasm_derive;
-extern crate serde;
 
 use eng_wasm::*;
 use eng_wasm_derive::pub_interface;
-use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
 // Encrypted state keys
 static DATASET_COLLECTION: &str = "dataset_collection";
 static NAME_LIST: &str = "name_list";
-
-// Structs
-#[derive(Serialize, Deserialize)]
-pub struct Millionaire {
-    address: H160,
-    net_worth: U256,
-}
 
 // Public struct Contract which will consist of private and public-facing secret contract functions
 pub struct Contract;
@@ -46,7 +37,7 @@ pub trait ContractInterface{
 impl ContractInterface for Contract {
     #[no_mangle]
     fn construct() {
-        write_state!(NAME_LIST => String::from("start"));
+        write_state!(NAME_LIST => String::new());
     }
 
     #[no_mangle]
@@ -55,8 +46,8 @@ impl ContractInterface for Contract {
         assert!(!collection.contains_key(&name), "dataset name is dupplicated");
         let mut namelist = Self::get_name_list();
         collection.insert(name.clone(), dataset);
-        namelist.push(',');
         namelist.push_str(name.as_str());
+        namelist.push(',');
         write_state!(DATASET_COLLECTION => collection);
         write_state!(NAME_LIST => namelist);        
     }
