@@ -57,7 +57,7 @@ async function deploySecretContract(config){
   var result = await enigma.admin.isDeployed(scTask.scAddr);
   if(result) {
 
-    fs.writeFile(path.join('../test/',config.filename.replace(/\.wasm$/, '.txt')), scTask.scAddr, 'utf8', function(err) {
+    fs.writeFile(path.join('test/',config.filename.replace(/\.wasm$/, '.txt')), scTask.scAddr, 'utf8', function(err) {
       if(err) {
         return console.log(err);
       }
@@ -102,4 +102,16 @@ module.exports = async function(deployer, network, accounts) {
   };
   const address = await deploySecretContract(config);
   console.log(`Secret Contract "${config.filename}" deployed at Enigma address: ${address}`);
+
+  const configSecretBenchmarking = {
+    filename: 'secret_benchmarking.wasm',
+    fn: 'construct()',
+    args: '',
+    gasLimit: 1000000,
+    gasPrice: utils.toGrains(1),
+    from: accounts[0]
+  };
+  const addressSecretBenchmarking = await deploySecretContract(configSecretBenchmarking);
+  console.log(`Secret Contract "${configSecretBenchmarking.filename}" deployed at Enigma address: ${addressSecretBenchmarking}`);
+
 };
